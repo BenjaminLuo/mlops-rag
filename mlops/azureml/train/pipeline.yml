@@ -93,7 +93,7 @@ jobs:
       per_device_eval_batch_size: ${{parent.inputs.batch_size}}
     outputs:
       finetuned_model: ${{parent.outputs.finetuned_model}}
-    compute: azureml:gpu-cluster
+    compute: azureml:cpu-cluster
     distribution:
       type: pytorch
       process_count_per_instance: 1 # number of gpus
