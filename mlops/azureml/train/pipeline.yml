@@ -96,7 +96,7 @@ jobs:
     compute: azureml:cpu-cluster
     distribution:
       type: pytorch
-      process_count_per_instance: 1 # number of gpus
+      # process_count_per_instance: 1 # number of gpus
     resources:
       instance_count: 1 # number of nodes
 
