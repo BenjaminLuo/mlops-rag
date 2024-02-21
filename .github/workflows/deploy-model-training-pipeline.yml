@@ -41,8 +41,8 @@ jobs:
     needs:
       [
         get-config,
-        create-compute-standard
-        register-environment,
+        create-compute-standard,
+        register-environment
       ]
     uses: ./.github/workflows/run-pipeline.yml
     with:
