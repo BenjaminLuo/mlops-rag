@@ -22,11 +22,41 @@ jobs:
       client-id: ${{ secrets.AZURE_CLIENT_ID }}
       tenant-id: ${{ secrets.AZURE_TENANT_ID }}
       subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+  create-compute-large:
+    needs: get-config
+    uses: ./.github/workflows/create-compute.yml
+    with:
+      cluster_name: cpu-cluster-lg
+      size: STANDARD_DS3_V2
+      min_instances: 0
+      max_instances: 1
+      resource_group: ${{ needs.get-config.outputs.resource_group }}
+      workspace_name: ${{ needs.get-config.outputs.aml_workspace }}
+    secrets:
+      client-id: ${{ secrets.AZURE_CLIENT_ID }}
+      tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+      subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+  create-compute-gpu:
+    needs: get-config
+    uses: ./.github/workflows/create-compute.yml
+    with:
+      cluster_name: gpu-cluster
+      size: STANDARD_DS3_V2
+      min_instances: 0
+      max_instances: 1
+      resource_group: ${{ needs.get-config.outputs.resource_group }}
+      workspace_name: ${{ needs.get-config.outputs.aml_workspace }}
+    secrets:
+      client-id: ${{ secrets.AZURE_CLIENT_ID }}
+      tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+      subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
   register-environment:
     needs:
       [
         get-config,
-        create-compute-standard
+        create-compute-standard,
+        create-compute-large,
+        create-compute-gpu
       ]
     uses: ./.github/workflows/register-environment.yml
     with:
@@ -42,6 +72,8 @@ jobs:
       [
         get-config,
         create-compute-standard,
+        create-compute-large,
+        create-compute-gpu,
         register-environment
       ]
     uses: ./.github/workflows/run-pipeline.yml
