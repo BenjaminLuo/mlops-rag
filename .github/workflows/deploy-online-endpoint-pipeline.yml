@@ -10,7 +10,7 @@ jobs:
         file_name: config-infra-prod.yml
   create-endpoint:
       needs: get-config
-      uses: Azure/mlops-templates/.github/workflows/create-endpoint.yml@main
+      uses: ./.github/workflows/create-endpoint.yml
       with:
         resource_group: ${{ needs.get-config.outputs.resource_group }}
         workspace_name: ${{ needs.get-config.outputs.aml_workspace }} 
@@ -18,9 +18,11 @@ jobs:
         endpoint_name: nlp-summarization-online-dp
         endpoint_type: online
       secrets:
-        creds: ${{secrets.AZURE_CREDENTIALS}}
+            client-id: ${{ secrets.AZURE_CLIENT_ID }}
+            tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+            subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
   create-deployment:
-      uses: Azure/mlops-templates/.github/workflows/create-deployment.yml@main
+      uses: ./.github/workflows/create-deployment.yml
       needs: [get-config,create-endpoint]
       with:
         resource_group: ${{ needs.get-config.outputs.resource_group }}
@@ -30,9 +32,11 @@ jobs:
         endpoint_type: online
         deployment_name: nlp-summarization-online-dp
       secrets:
-        creds: ${{secrets.AZURE_CREDENTIALS}}
+        client-id: ${{ secrets.AZURE_CLIENT_ID }}
+        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
   allocate-traffic:
-      uses: Azure/mlops-templates/.github/workflows/allocate-traffic.yml@main
+      uses: ./.github/workflows/allocate-traffic.yml
       needs: [get-config,create-deployment]
       with:
         resource_group: ${{ needs.get-config.outputs.resource_group }}
@@ -40,4 +44,6 @@ jobs:
         traffic_allocation: nlp-summarization-online-dp=100
         endpoint_name: nlp-summarization-online-dp
       secrets:
-        creds: ${{secrets.AZURE_CREDENTIALS}}
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
