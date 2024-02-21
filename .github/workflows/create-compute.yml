@@ -42,15 +42,13 @@ jobs:
       - name: Azure login
         uses: azure/login@v1
         with:
-          auth-type: IDENTITY
           client-id: ${{secrets.client-id}}
           tenant-id: ${{secrets.tenant-id}}
           subscription-id: ${{secrets.subscription-id}}
-          enable-AzPSSession: true
       - name: Azure CLI script
         uses: azure/CLI@v1
         with:
-          azcliversion: latest
+          azcliversion: 2.30.0
           inlineScript: |
             az extension add -n ml -y
             az extension update -n ml
@@ -58,7 +56,7 @@ jobs:
         if: ${{ inputs.cluster_tier == ''}}
         uses: azure/CLI@v1
         with:
-          azcliversion: latest
+          azcliversion: 2.30.0
           inlineScript: |
             az ml compute create --name ${{ inputs.cluster_name }} \
                                   --type AmlCompute \
@@ -72,7 +70,7 @@ jobs:
         if: ${{ inputs.cluster_tier != ''}}
         uses: azure/CLI@v1
         with:
-          azcliversion: latest
+          azcliversion: 2.30.0
           inlineScript: |
             az ml compute create --name ${{ inputs.cluster_name }} \
                                   --type AmlCompute \
