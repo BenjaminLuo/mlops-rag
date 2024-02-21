@@ -46,7 +46,6 @@ jobs:
           tenant-id: ${{secrets.tenant-id}}
           subscription-id: ${{secrets.subscription-id}}
           auth-type: IDENTITY
-          enable-AzPSSession: true 
       - name: install-extension
         run:  az extension add -n ml -y
       - name: update-extension
